@@ -8,6 +8,11 @@
 #include <iostream>
 #include <string>
 
+void test(QSystemTrayIcon::ActivationReason r)
+{
+    std::cerr << "Hello " << r << std::endl;
+}
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -31,6 +36,10 @@ int main(int argc, char *argv[])
 
     std::ifstream is;
     auto update = [&] () {
+        if (QSystemTrayIcon::isSystemTrayAvailable() && !systray.isVisible()) {
+            systray.show();
+        }
+
         is.open("/sys/class/power_supply/BAT0/status");
 
         if (is.is_open()) {
